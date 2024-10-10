@@ -46,22 +46,26 @@ try {
 })
 
 
-
 notesRouter.delete('/delete/:id', async (req, res) => {
     try {
-      const { id } = req.params; // Extract the id from the URL parameters
-  
-      const data = await notesModel.findByIdAndDelete(id, { userId: req.userId });
-  
-      if (!data) {
-        return res.status(404).json({ msg: 'Note not found or delete failed' });
-      }
-      res.status(200).json({ msg: 'Note deleted successfully', data });
+        const { id } = req.params; // Extract the id from the URL parameters
+
+        // Find the note by both id and userId
+        const note = await notesModel.findOne({ _id: id, userId: req.userId });
+
+        if (!note) {
+            return res.status(404).json({ msg: 'Note not found or deletion not authorized' });
+        }
+
+        // If the note is found, proceed to delete
+        await notesModel.findByIdAndDelete(id);
+        res.status(200).json({ msg: 'Note deleted successfully', note });
     } catch (error) {
-      res.status(500).json({ msg: 'Failed to delete note', error: error.message });
-      console.log(error);
+        res.status(500).json({ msg: 'Failed to delete note', error: error.message });
+        console.log(error);
     }
-  });
+});
+
   
 
 
