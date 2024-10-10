@@ -22,7 +22,7 @@ app.use('/user',userRouter)
 app.use("/notes",Auth,notesRouter)
 
 app.get('/',(req,res)=>{
-    res.send('server running fine')
+    res.send('server running fine !!')
 })
 
 

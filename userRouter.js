@@ -9,9 +9,9 @@ userRouter.post('/register',async(req,res)=>{
     try {
         
         bcrypt.hash(req.body.password, 3, async function(err, hash) {
-            
+        
             if(err){
-                return res.status(400).json({msg:'error'})
+                return res.status(400).json({msg:'error',err})
             }
 
             req.body.password=hash
